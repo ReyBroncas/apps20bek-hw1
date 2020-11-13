@@ -3,8 +3,8 @@ package ua.edu.ucu.tempseries;
 import java.util.InputMismatchException;
 
 public class TemperatureSeriesAnalysis {
-    static double ZERO = -273.0;
-    static int ARRAY_REALLOCATE_COEFFICIENT = 2;
+    static final double ZERO = -273.0;
+    static final int ARRAY_REALLOCATE_COEFFICIENT = 2;
     private double[] temperatureList;
     private int tempSeriesBuffer = 0;
     private int tempSeriesSize = 0;
@@ -20,7 +20,8 @@ public class TemperatureSeriesAnalysis {
         tempSeriesBuffer = temperatureSeries.length;
         tempSeriesSize = tempSeriesBuffer;
         temperatureList = new double[tempSeriesBuffer];
-        System.arraycopy(temperatureSeries, 0, temperatureList, 0, tempSeriesBuffer);
+        System.arraycopy(temperatureSeries, 0, temperatureList,
+                0, tempSeriesBuffer);
     }
 
     public void checkSeries(double[] temperatureSeries, boolean eachTemp) {
@@ -54,21 +55,23 @@ public class TemperatureSeriesAnalysis {
         double avg = average();
         double sum = 0;
         for (double x : temperatureList) {
-            sum += Math.pow((x - avg), 2);
+            sum += ((x - avg)* (x - avg));
         }
         return sum / tempSeriesBuffer;
     }
 
     public double max() throws IllegalArgumentException {
-        return find_max_value(true);
+        return findMaxValue(true);
     }
 
     public double min() throws IllegalArgumentException {
-        return find_max_value(false);
+        return findMaxValue(false);
     }
 
-    public double find_max_value(boolean isMax) throws IllegalArgumentException {
+    public double findMaxValue(boolean isMax)
+            throws IllegalArgumentException {
         checkSeries(temperatureList, false);
+        // change inline check
         int multiValue = isMax ? 1 : -1;
         double outValue = temperatureList[0];
         for (int i = 1; i < tempSeriesBuffer; ++i) {
@@ -84,7 +87,8 @@ public class TemperatureSeriesAnalysis {
     }
 
     // Searches for the FIRST closest value in array
-    public double findTempClosestToValue(double tempValue) throws IllegalArgumentException {
+    public double findTempClosestToValue(double tempValue)
+            throws IllegalArgumentException {
         checkSeries(temperatureList, false);
         int closestValueIndex = 0;
         double currentDiff;
@@ -92,28 +96,36 @@ public class TemperatureSeriesAnalysis {
         for (int i = 0; i < tempSeriesBuffer; ++i) {
 
             currentDiff = Math.abs(tempValue - temperatureList[i]);
-            closestDiff = Math.abs(tempValue - temperatureList[closestValueIndex]);
+            closestDiff = Math.abs(tempValue -
+                    temperatureList[closestValueIndex]);
 
             if (currentDiff < closestDiff) {
                 closestValueIndex = i;
-            } else if ((currentDiff == closestDiff) && (temperatureList[i] > temperatureList[closestValueIndex])) {
+            } else if ((currentDiff == closestDiff) &&
+                    (temperatureList[i] >
+                            temperatureList[closestValueIndex])) {
                 closestValueIndex = i;
             }
         }
         return temperatureList[closestValueIndex];
     }
 
-    public double[] findTempsGreaterThen(double tempValue) throws IllegalArgumentException {
+    public double[] findTempsGreaterThen(double tempValue)
+            throws IllegalArgumentException {
         return find_greater_than_value(tempValue, false);
     }
 
-    public double[] findTempsLessThen(double tempValue) throws IllegalArgumentException {
+    public double[] findTempsLessThen(double tempValue)
+            throws IllegalArgumentException {
         return find_greater_than_value(tempValue, true);
     }
 
 
-    public double[] find_greater_than_value(double tempValue, boolean greater) throws IllegalArgumentException {
+    public double[] find_greater_than_value(double tempValue,
+                                            boolean greater)
+            throws IllegalArgumentException {
         checkSeries(temperatureList, false);
+        // change inline check
         int great = greater ? 1 : -1;
         int cnt = 0;
         for (double x : temperatureList) {
@@ -140,7 +152,9 @@ public class TemperatureSeriesAnalysis {
         return new TempSummaryStatistics(avg, dev, min, max);
     }
 
-    public int addTemps(double[] temps) throws IllegalArgumentException, InputMismatchException {
+    public int addTemps(double[] temps)
+            throws IllegalArgumentException,
+            InputMismatchException {
         checkSeries(temps, true);
         int inputSeriesSize = temps.length;
         int newSize = tempSeriesSize + inputSeriesSize;
@@ -152,8 +166,8 @@ public class TemperatureSeriesAnalysis {
 
         int newBuff = tmp;
         double[] newTempSeries = new double[newBuff];
-
-        for (int i = 0, j = 0; i < newSize; ++i) {
+        int j = 0;
+        for (int i = 0; i < newSize; ++i) {
             if (i < tempSeriesBuffer) {
                 newTempSeries[i] = temperatureList[i];
             } else {
