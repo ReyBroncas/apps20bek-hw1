@@ -10,6 +10,9 @@ public class TemperatureSeriesAnalysis {
     private int tempSeriesSize = 0;
 
     public TemperatureSeriesAnalysis() {
+        temperatureList = new double[0];
+        tempSeriesBuffer = 0;
+        tempSeriesSize = 0;
     }
 
     public TemperatureSeriesAnalysis(double[] temperatureSeries) {
