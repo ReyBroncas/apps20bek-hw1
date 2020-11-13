@@ -55,7 +55,7 @@ public class TemperatureSeriesAnalysis {
         double avg = average();
         double sum = 0;
         for (double x : temperatureList) {
-            sum += ((x - avg)* (x - avg));
+            sum += ((x - avg) * (x - avg));
         }
         return sum / tempSeriesBuffer;
     }
@@ -71,8 +71,12 @@ public class TemperatureSeriesAnalysis {
     public double findMaxValue(boolean isMax)
             throws IllegalArgumentException {
         checkSeries(temperatureList, false);
-        // change inline check
-        int multiValue = isMax ? 1 : -1;
+        int multiValue;
+        if (isMax) {
+            multiValue = 1;
+        } else {
+            multiValue = -1;
+        }
         double outValue = temperatureList[0];
         for (int i = 1; i < tempSeriesBuffer; ++i) {
             if (temperatureList[i] * multiValue > outValue * multiValue) {
@@ -96,14 +100,14 @@ public class TemperatureSeriesAnalysis {
         for (int i = 0; i < tempSeriesBuffer; ++i) {
 
             currentDiff = Math.abs(tempValue - temperatureList[i]);
-            closestDiff = Math.abs(tempValue -
-                    temperatureList[closestValueIndex]);
+            closestDiff = Math.abs(tempValue
+                    - temperatureList[closestValueIndex]);
 
             if (currentDiff < closestDiff) {
                 closestValueIndex = i;
-            } else if ((currentDiff == closestDiff) &&
-                    (temperatureList[i] >
-                            temperatureList[closestValueIndex])) {
+            } else if ((currentDiff == closestDiff)
+                    && (temperatureList[i]
+                    > temperatureList[closestValueIndex])) {
                 closestValueIndex = i;
             }
         }
@@ -112,21 +116,25 @@ public class TemperatureSeriesAnalysis {
 
     public double[] findTempsGreaterThen(double tempValue)
             throws IllegalArgumentException {
-        return find_greater_than_value(tempValue, false);
+        return findGreaterThanValue(tempValue, false);
     }
 
     public double[] findTempsLessThen(double tempValue)
             throws IllegalArgumentException {
-        return find_greater_than_value(tempValue, true);
+        return findGreaterThanValue(tempValue, true);
     }
 
 
-    public double[] find_greater_than_value(double tempValue,
-                                            boolean greater)
+    public double[] findGreaterThanValue(double tempValue,
+                                         boolean greater)
             throws IllegalArgumentException {
         checkSeries(temperatureList, false);
-        // change inline check
-        int great = greater ? 1 : -1;
+        int great;
+        if (greater) {
+            great = 1;
+        } else {
+            great = -1;
+        }
         int cnt = 0;
         for (double x : temperatureList) {
             if (Double.compare(tempValue, x) * great > 0) {
